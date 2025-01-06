@@ -73,10 +73,14 @@ void ControllerFabric::eventsRead (std::ifstream& file)
                 break;
             }
         }
-        Event res = this->state->commandExecute(this->commandCreate(buffer), buffer.time);
+        Command* command = this->commandCreate(buffer);
+        Event res = this->state->commandExecute(command, buffer.time);
         buffer = res;
+        delete command;
     }
     // end work command
     buffer.id = 11;
+    Command* command = this->commandCreate(buffer);
     this->state->commandExecute(this->commandCreate(buffer), buffer.time);
+    delete command;
 }
