@@ -106,6 +106,11 @@ Event LeaveCommand::execute(Observer* obs)
             int numtable = std::distance(obs->tabledatabaseGet().begin(), pos);
             std::string newclient = obs->queueGet().front();
             obs->queueGet().pop();
+            while(std::find(obs->databaseGet().begin(), obs->databaseGet().end(), newclient) == obs->databaseGet().end())
+            {
+                newclient = obs->queueGet().front();
+                obs->queueGet().pop();
+            }
             // first client in queue enter table
             res = Event{this->time, 12, newclient + " " + std::to_string(numtable+1)};
         }
